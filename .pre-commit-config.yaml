@@ -1,0 +1,101 @@
+exclude: ^(docs/|.devcontainer/)
+default_language_version:
+  ruby: 2.7.2
+repos:
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
+  - repo: local
+    hooks:
+      # - id: check-author-email
+      #   name: check author email
+      #   entry: ./scripts/check-author-email
+      #   pass_filenames: false
+      #   language: script
+      #   fail_fast: true
+      - id: clean-notebooks
+        name: clean notebooks
+        entry: nbdev_clean --fname "**/*.ipynb"
+        additional_dependencies: [nbdev>=2.3.7, 'black[jupyter]>=22.10']
+        files: .ipynb
+        pass_filenames: false
+        language: python
+      - id: integration-test
+        name: integration tests
+        entry: pipenv run pytest --no-cov tests/integration
+        types: [python]
+        language: system
+        pass_filenames: false
+        fail_fast: true
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-ast
+      - id: check-added-large-files
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: check-yaml
+        args: ['--unsafe']
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: fix-encoding-pragma
+        args: ['--remove']
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: no-commit-to-branch
+        args: [--branch, master]
+      - id: pretty-format-json
+        args: [--autofix]
+        exclude: ^(.devcontainer/|Pipfile.lock)
+      - id: sort-simple-yaml
+      - id: trailing-whitespace
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v2.1.3
+    hooks:
+      - id: pycln
+        files: '^(src|tests)/.*'
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort
+        args: [--atomic, --profile=black, --multi-line=3, --filter-files]
+        files: '^(src|tests)/.*'
+        fail_fast: true
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+        files: '^(src|tests)/.*'
+        fail_fast: true
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-print]
+        require_serial: false
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.6.1
+    hooks:
+      - id: nbqa-isort
+      - id: nbqa-black
+      - id: nbqa-flake8
+        args: ['--ignore=E402,E501,E302,E722,W503']
+        require_serial: false
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.1-beta
+    hooks:
+      - id: hadolint
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.11.0
+    hooks:
+      - id: markdownlint
+        args: [--rules, ~MD013]

@@ -1,0 +1,55 @@
+{
+  "configurations": [
+    {
+      "console": "internalConsole",
+      "justMyCode": false,
+      "name": "Python: Current File",
+      "program": "${file}",
+      "request": "launch",
+      "type": "python"
+    },
+    {
+      "args": [
+        "tests"
+      ],
+      "console": "internalConsole",
+      "env": {
+        "PYTEST_ADDOPTS": "--no-cov"
+      },
+      "justMyCode": false,
+      "module": "pytest",
+      "name": "All Test",
+      "request": "launch",
+      "type": "python"
+    },
+    {
+      "args": [
+        "tests/integration"
+      ],
+      "console": "internalConsole",
+      "env": {
+        "PYTEST_ADDOPTS": "--no-cov"
+      },
+      "justMyCode": false,
+      "module": "pytest",
+      "name": "Integration Test",
+      "request": "launch",
+      "type": "python"
+    },
+    {
+      "console": "internalConsole",
+      "env": {
+        "PYTEST_ADDOPTS": "-n0 --no-cov"
+      },
+      "justMyCode": false,
+      "name": "Python: Debug Tests",
+      "program": "${file}",
+      "purpose": [
+        "debug-test"
+      ],
+      "request": "launch",
+      "type": "python"
+    }
+  ],
+  "version": "0.2.0"
+}

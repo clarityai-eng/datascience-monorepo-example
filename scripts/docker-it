@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+set -e
+
+help() {
+    echo "Spawn an interactive docker container for the project"
+    exit 2
+}
+
+DOCKER_IMAGE=datasicence
+DOCKER_TAG=latest
+
+docker run \
+    -it \
+    --name=datascience \
+    --env-file .env \
+    -v "$(pwd)":/opt/project \
+    -v "${HOME}/.aws/credentials":/root/.aws/credentials:ro \
+    -v "${HOME}/.aws/config":/root/.aws/config:ro \
+    --entrypoint bash \
+    --rm "${DOCKER_IMAGE}:${DOCKER_TAG}"

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Check email author is a company email valid email address
+
+PWD=$(pwd)
+EMAIL=$(git config user.email)
+COMPANY_DOMAIN="yourcompany.com"
+
+if [[ $EMAIL == *"@${COMPANY_DOMAIN}"* ]]; then
+  echo "[INFO] Verified email: $EMAIL"
+else
+    echo
+    echo "Who Are You?"
+    echo "Invalid git author email address ${EMAIL}"
+    echo
+    echo "Try setting your name and email by: "
+    echo "    git config user.name YOUR_NAME"
+    echo "    git config user.email YOUR_NAME@${COMPANY_DOMAIN}"
+    exit 1
+fi

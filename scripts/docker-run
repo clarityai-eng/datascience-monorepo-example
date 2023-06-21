@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+
+set -e
+
+help() {
+    cat <<BLOCK
+Run a python module inside the project docker container
+
+Usage: docker-run [py_module] [py_module_options]
+
+    py_module:          python module to run. Use python dot module notation.
+                        Example 'models.predict'
+    py_module_options:  extra options passed to the python module
+                        (arguments or other command line options)
+BLOCK
+    exit 2
+}
+
+PROJECT_NAME=datascience
+DOCKER_IMAGE=${PROJECT_NAME}
+DOCKER_TAG=latest
+
+# Arguments
+if [ $# -lt 1 ]; then
+    echo "py_module is required"
+    echo ""
+    help
+fi
+
+module=$*
+
+docker run \
+    --name=datascience \
+    --env-file .env \
+    -v "${HOME}/.aws/credentials":/root/.aws/credentials:ro \
+    -v "${HOME}/.aws/config":/root/.aws/config:ro \
+    --rm "${DOCKER_IMAGE}:${DOCKER_TAG}" "$module"

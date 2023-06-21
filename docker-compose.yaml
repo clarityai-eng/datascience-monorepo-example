@@ -1,0 +1,99 @@
+version: "3.8"
+
+volumes:
+  mlflow-postgres:
+  mlflow-minio:
+
+services:
+  minio:
+    image: minio/minio
+    container_name: mlflow-minio-s3
+    expose:
+      - 9000
+      - 9001
+    volumes:
+      - mlflow-minio:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address :9001
+    healthcheck:
+      test: curl -f http://localhost:9000/minio/health/live || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    mem_limit: 200m
+    mem_reservation: 100m
+    cpus: 0.25
+
+  create-bucket:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MC_HOST_MINIO: http://minioadmin:minioadmin@minio:9000
+    entrypoint: /bin/bash -c
+    command:
+    - |
+      mc alias set minio http://minio:9000 minioadmin minioadmin;
+      mc mb --ignore-existing minio/mlflow;
+
+  postgresql:
+    image: postgres:alpine
+    container_name: mlflow-db
+    hostname: postgresql
+    expose:
+      - 5432
+    volumes:
+      - mlflow-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mlflow-db
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    healthcheck:
+      test: pg_isready -h localhost -p 5432 -U postgres || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    mem_limit: 200m
+    mem_reservation: 100m
+    cpus: 0.25
+
+  mlflow:
+    image: datascience:mlflow
+    container_name: mlflow-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: mlflow
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+    depends_on:
+      minio:
+        condition: service_healthy
+      create-bucket:
+        condition: service_completed_successfully
+      postgresql:
+        condition: service_healthy
+    environment:
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+    command:
+      - --backend-store-uri=postgresql://postgres:postgres@postgresql:5432/mlflow-db
+      - --artifacts-destination=s3://mlflow/
+      - --serve-artifacts
+      - --host=0.0.0.0
+    healthcheck:
+      test: curl -f http://localhost:5000/health || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    mem_limit: 1g
+    mem_reservation: 500m
+    cpus: 0.5

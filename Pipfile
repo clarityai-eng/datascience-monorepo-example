@@ -1,0 +1,58 @@
+[dev-packages]
+# Linting and formatting
+black = {version = ">=22.3.0", extras = ['jupyter']}
+flake8 = ">=4.0.1"
+flake8-print = ">=5.0.0"
+isort = ">=5.10.1"
+mypy = "~=0.971"
+myst-nb = ">=0.17.1"
+nbdev = ">=2.2.10"
+nbformat = ">=5.5.0"
+pandas-stubs = "~=1.5"
+# Testing
+pytest = "~=7.1"
+pytest-cov = "~=3.0"
+pytest-sugar = ">=0.9.5"
+pytest-xdist = {version = ">=2.5.0", extras = ['psutil']}
+testcontainers = "~=3.7"
+# Jupyter
+ipython-sql = ">=0.4.1"
+jupyter = ">=1.0.0"
+pyprojroot = ">=0.2.0"
+# Build
+pre-commit = "~=2.20"
+pycln = ">=2.1.2"
+refurb = ">=1.9.1"
+setuptools_scm = {version = ">=6.2", extras = ['toml']}
+types-setuptools = ">=63.2.1"
+# Doc generation
+mkdocs = "~=1.4"
+mkdocs-gen-files = "~=0.4"
+mkdocs-jupyter = "~=0.9"
+mkdocs-material = "~=9.1"
+mkdocstrings = {version = "~=0.9", extras = ["python"]}
+# Self for usage in notebooks. In dev to prevent issues when deploying
+datascience = {editable = true, path = "."}
+
+[packages]
+loguru = "~=0.6"
+mlflow = "~=2.4"
+numba = "==0.56.4" # NOTE: pin version to avoid issues with shap
+numpy = "==1.21.4" # NOTE: pin version to avoid issues with shap
+pandas = "~=1.5"
+pandera = {version = "~=0.12", extras = ["mypy", "dask"]}
+psycopg2-binary = "~=2.9"
+pyarrow = {version = "~=11.0", extras = ["pandas"]}
+pydantic = {version = "~=1.10", extras = ["dotenv"]}
+scikit-learn = "~=1.2"
+seaborn = ">=0.11.2"
+shap = "~=0.9"
+sqlalchemy = "~=1.4"
+statsmodels = "~=0.14"
+tqdm = "~=4.65"
+
+[requires]
+python_version = "3.10"
+
+[scripts]
+mlflow = "mlflow server --backend-store-uri=sqlite:///mlruns.db --default-artifact-root=file:mlruns"

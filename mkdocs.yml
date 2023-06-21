@@ -1,0 +1,44 @@
+site_name: Data Science Monorepo
+theme:
+  name: material
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      toggle:
+        icon: material/brightness-3
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      toggle:
+        icon: material/brightness-5
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+plugins:
+  - search
+  - mkdocstrings
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - mkdocs-jupyter:
+      include: ["*.ipynb"]
+      ignore: []
+markdown_extensions:
+  - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+watch:
+  - 'src/'
+  - 'README.md'

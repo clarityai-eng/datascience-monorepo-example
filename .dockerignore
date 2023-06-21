@@ -1,0 +1,8 @@
+# Ignore everything
+/*
+
+# Except the selected files and folder
+!README.md
+!src/
+!Pipfile*
+!pyproject.toml
