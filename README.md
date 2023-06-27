@@ -7,7 +7,7 @@
 
 Monorepo example for Data Science teams.
 
-- Check out the original article [here](TODO) to understand the underlying principles of the design.
+- Check out the original article [here](https://medium.com/clarityai-engineering/monorepo-in-data-science-teams-892fe64a9ef0) to understand the underlying principles of the design.
 - Check out the [getting started guide](getting_started/index.md) for more information on how to use this project.
 
 ## Getting Started
@@ -113,7 +113,7 @@ When running the project as a docker image, you must specify the module to run a
 
 ## Documentation
 
-Documentation uses `mkdocs` and is hosted in [GitHub Pages](TODO).
+Documentation uses `mkdocs`.
 
 To run the documentation locally, run `make mkdocs` and open <http://localhost:8000>
 

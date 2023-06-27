@@ -2,8 +2,7 @@
 
 To be able to understand and navigate the project effectively, it is important to understand the design principles taken during designing the structure.
 
-Check out the original companing article
-<!-- TODO: link to the article -->
+Check out the [original companing article](https://medium.com/clarityai-engineering/monorepo-in-data-science-teams-892fe64a9ef0).
 
 ## Zen of Python
 
